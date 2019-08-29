@@ -1,7 +1,7 @@
 {
-    "name": "mstfsnc/nestpay",
+    "name": "koddea/nestpay",
     "type": "library",
-    "description": "Omnipay için Nestpay 3D_Pay kütüphanesi",
+    "description": "Omnipay için Nestpay 3D_Pay ve 3D_Pay_Hosting ödeme yöntemlerini destekleyen kütüphane",
     "keywords": [
         "omnipay",
         "nestpay"
@@ -18,6 +18,6 @@
         "psr-4": { "Omnipay\\Nestpay\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "~2.0"
+        "omnipay/common" : "~3.0"
     }
 }

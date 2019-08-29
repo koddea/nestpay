@@ -6,6 +6,13 @@ use Omnipay\Common\AbstractGateway;
 
 class Gateway extends AbstractGateway
 {
+
+    public function initialize(array $parameters = array())
+    {
+        parent::initialize($parameters);
+        $this->setStoreType('3d_pay');
+    }
+
     public function getName()
     {
         return 'Nestpay';
@@ -65,6 +72,16 @@ class Gateway extends AbstractGateway
 
     public function setStoreKey ($value) {
         return $this->setParameter('storeKey', $value);
+    }
+
+    public function getStoreType()
+    {
+        return $this->getParameter('storetype');
+    }
+
+    public function setStoreType($value)
+    {
+        return $this->setParameter('storetype', $value);
     }
 
     public function getFirmName() {

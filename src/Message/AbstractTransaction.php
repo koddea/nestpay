@@ -51,8 +51,8 @@ abstract class AbstractTransaction extends AbstractRequest
             )
         ));
 
-        $httpResponse = $this->httpClient->post($this->getEndpoint(), $headers, $document->saveXML())->send();
+        $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $document->saveXML());
 
-        return $this->response = new TransactionResponse($this, $httpResponse->getBody());
+        return $this->response = new TransactionResponse($this, $httpResponse->getBody()->getContents());
     }
 }

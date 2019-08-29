@@ -19,7 +19,10 @@ class CompletePaymentResponse extends AbstractResponse
     }
 
     public function isSuccessful()
-    {   
+    {
+        if($this->request->getStoreType = "3d_pay_hosting"){
+            return $this->data["Response"] === 'Approved';
+        }
         return in_array($this->data['mdStatus'], [1, 2, 3, 4]) && $this->data["Response"] === 'Approved';
     }
 

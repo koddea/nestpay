@@ -71,6 +71,16 @@ abstract class AbstractRequest extends \Omnipay\Common\Message\AbstractRequest
         return $this->setParameter('installment', $value);
     }
 
+    public function getStoreType()
+    {
+        return $this->getParameter('storetype');
+    }
+
+    public function setStoreType($value)
+    {
+        return $this->setParameter('storetype', $value);
+    }
+
     public function getEndpoint()
     {
         $gateway = $this->getBank();

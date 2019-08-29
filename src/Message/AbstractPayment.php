@@ -22,31 +22,42 @@ abstract class AbstractPayment extends AbstractRequest
 
     public function getData()
     {
-        $this->validate('amount', 'card');
 
-        $cardBrand = $this->getCard()->getBrand();
-        if (!array_key_exists($cardBrand, $this->allowedCardBrands)) {
-            throw new InvalidCreditCardException('Kart geçerli değil, sadece Visa ya da MasterCard kullanılabilir');
-        } 
+        if ($this->getStoreType() == '3d_pay') {
+            $this->validate('amount', 'card');
+            $this->getCard()->validate();
+
+            $cardBrand = $this->getCard()->getBrand();
+            if (!array_key_exists($cardBrand, $this->allowedCardBrands)) {
+                throw new InvalidCreditCardException('Kart geçerli değil, sadece Visa ya da MasterCard kullanılabilir');
+            }
+
+        }else if($this->getStoreType() == '3d_pay_hosting'){
+            $this->validate('amount');
+        }
 
         $data = array();
-        $data['pan'] = $this->getCard()->getNumber();
-        $data['cv2'] = $this->getCard()->getCvv();
-        $data['Ecom_Payment_Card_ExpDate_Year'] = $this->getCard()->getExpiryDate('y');
-        $data['Ecom_Payment_Card_ExpDate_Month'] = $this->getCard()->getExpiryDate('m');
-        $data['cardType'] = $this->allowedCardBrands[$cardBrand];
+
+        if ($this->getStoreType() == '3d_pay') {
+            $data['pan'] = $this->getCard()->getNumber();
+            $data['cv2'] = $this->getCard()->getCvv();
+            $data['Ecom_Payment_Card_ExpDate_Year'] = $this->getCard()->getExpiryDate('y');
+            $data['Ecom_Payment_Card_ExpDate_Month'] = $this->getCard()->getExpiryDate('m');
+            $data['cardType'] = $this->allowedCardBrands[$this->getCard()->getBrand()];
+        }
 
         $data['clientid'] = $this->getClientId();
         $data['oid'] = $this->getOrderId();
         $data['amount'] = $this->getAmount();
-        $data['currency'] = $this->getCurrency();
+        $data['currency'] = $this->getCurrencyNumeric();
         $data['okUrl'] = $this->getReturnUrl();
         $data['failUrl'] = $this->getCancelUrl();
-        $data['storetype'] = '3d_pay';
+        $data['storetype'] = $this->getStoreType();
         $data['rnd'] = time();
         $data['firmaadi'] = $this->getFirmName();
         $data['islemtipi'] = $this->transactionType;
-        
+        $data['refreshtime'] = 0;
+
         $data['taksit'] = null;
         if ($installment = $this->getInstallment()) {
             $data['taksit'] = $installment;
