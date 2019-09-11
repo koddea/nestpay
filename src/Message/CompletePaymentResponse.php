@@ -33,7 +33,7 @@ class CompletePaymentResponse extends AbstractResponse
 
     public function getTransactionId()
     {
-        return $this->data['TransId'];
+        return @$this->data['TransId'];
     }
 
     public function getTransactionReference()
@@ -54,6 +54,11 @@ class CompletePaymentResponse extends AbstractResponse
     public function getOrderId()
     {
         return $this->data['ReturnOid'];
+    }
+
+    public function getCode()
+    {
+        return @$this->data['AuthCode'];
     }
 
     private function signHash()
