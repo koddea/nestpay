@@ -41,15 +41,15 @@ abstract class AbstractTransaction extends AbstractRequest
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded'
         );
-        $this->httpClient->setConfig(array(
-            'curl.options' => array(
-                'CURLOPT_SSL_VERIFYHOST' => 2,
-                'CURLOPT_SSLVERSION' => 0,
-                'CURLOPT_SSL_VERIFYPEER' => 0,
-                'CURLOPT_RETURNTRANSFER' => 1,
-                'CURLOPT_POST' => 1
-            )
-        ));
+//        $this->httpClient->setConfig(array(
+//            'curl.options' => array(
+//                'CURLOPT_SSL_VERIFYHOST' => 2,
+//                'CURLOPT_SSLVERSION' => 0,
+//                'CURLOPT_SSL_VERIFYPEER' => 0,
+//                'CURLOPT_RETURNTRANSFER' => 1,
+//                'CURLOPT_POST' => 1
+//            )
+//        ));
 
         $httpResponse = $this->httpClient->request('POST', $this->getEndpoint(), $headers, $document->saveXML());
 
