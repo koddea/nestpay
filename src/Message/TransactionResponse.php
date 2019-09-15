@@ -9,13 +9,29 @@ use Omnipay\Common\Exception\InvalidResponseException;
 class TransactionResponse extends AbstractResponse
 {
 
-    public function __construct(RequestInterface $request, $data) {
+    private $requestBody = null;
+    private $responseBody = null;
+
+    public function __construct(RequestInterface $request, $requestXml, $responseXml) {
+
+        $this->requestBody = $requestXml;
+        $this->responseBody = $responseXml;
         $this->request = $request;
         try {
-            $this->data = (array) simplexml_load_string($data);
+            $this->data = (array) simplexml_load_string($responseXml);
         } catch (\Exception $ex) {
             throw new InvalidResponseException();
         }
+    }
+
+    public function getRequestBody()
+    {
+        return $this->requestBody;
+    }
+
+    public function getResponseBody()
+    {
+        return $this->responseBody;
     }
 
     public function isSuccessful() {
@@ -30,14 +46,14 @@ class TransactionResponse extends AbstractResponse
         return $this->data['ErrMsg'];
     }
 
-    public function getTransactionId()
-    {
-        return $this->data['TransId'];
-    }
-
     public function getTransactionReference()
     {
-        return $this->data['HostRefNum'];
+        return $this->isSuccessful() ? $this->data["TransId"] : '';
+    }
+
+    public function getCode()
+    {
+        return $this->isSuccessful() ? $this->data["AuthCode"] : parent::getCode();
     }
 
 }

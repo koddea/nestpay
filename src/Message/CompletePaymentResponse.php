@@ -31,14 +31,9 @@ class CompletePaymentResponse extends AbstractResponse
         return isset($this->data['ErrMsg']) ? $this->data['ErrMsg'] : $this->data['mdErrorMsg'];
     }
 
-    public function getTransactionId()
-    {
-        return @$this->data['TransId'];
-    }
-
     public function getTransactionReference()
     {
-        return $this->data['HostRefNum'];
+        return $this->isSuccessful() ? $this->data["TransId"] : '';
     }
 
     public function getAmount()
@@ -58,7 +53,7 @@ class CompletePaymentResponse extends AbstractResponse
 
     public function getCode()
     {
-        return @$this->data['AuthCode'];
+        return $this->isSuccessful() ? $this->data["AuthCode"] : parent::getCode();
     }
 
     private function signHash()
